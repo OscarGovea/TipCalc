@@ -26,9 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="numberSigned"
-        android:hint="@string/main.hint.percentege"
+        android:hint="@string/main.hint.percentage"
         android:ems="10"
-        android:id="@+id/inputPercentege"
+        android:id="@+id/inputPercentage"
         android:layout_alignBottom="@+id/btnIncrease"
         android:layout_toStartOf="@id/btnIncrease"
         android:layout_toLeftOf="@id/btnIncrease"/>
@@ -58,15 +58,14 @@
         android:layout_height="wrap_content"
         android:text="@string/main.button.clear"
         android:id="@+id/btnClear"
-        android:layout_below="@+id/inputPercentege"
+        android:layout_below="@+id/inputPercentage"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
- <View
+    <View
      android:layout_width="wrap_content"
      android:layout_height="1dp"
      android:layout_marginBottom="@dimen/activity_horizontal_margin"
-     android:textAppearance="?android:attr/textAppearanceLarge"
      android:background="@android:color/darker_gray"
      android:id="@+id/separator"
      android:layout_below="@+id/btnClear"
