@@ -1,4 +1,4 @@
-package com.herzen.tipcalc;
+package com.herzen.tipcalc.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +20,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import com.herzen.tipcalc.R;
+import com.herzen.tipcalc.TipCalcApp;
+import com.herzen.tipcalc.fragments.TipHistoryListFragment;
+import com.herzen.tipcalc.fragments.TipHistoryListFragmentListener;
+
+
 public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.inputBill)
@@ -37,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.txtTip)
     TextView txtTip;
 
+    private TipHistoryListFragmentListener fragmentListener;
+
     private final static int TIP_STEP_CHANGE = 1;
     private final static int DEFAULT_TIP_CHANGE = 10;
 
@@ -45,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        TipHistoryListFragment fragment = (TipHistoryListFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentList);
+        fragment.setRetainInstance(true);
+        fragmentListener = (TipHistoryListFragmentListener) fragment;
     }
 
     @Override
