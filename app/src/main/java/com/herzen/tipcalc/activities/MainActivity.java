@@ -24,6 +24,9 @@ import com.herzen.tipcalc.R;
 import com.herzen.tipcalc.TipCalcApp;
 import com.herzen.tipcalc.fragments.TipHistoryListFragment;
 import com.herzen.tipcalc.fragments.TipHistoryListFragmentListener;
+import com.herzen.tipcalc.models.TipRecord;
+
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -84,9 +87,14 @@ public class MainActivity extends AppCompatActivity {
             double total = Double.parseDouble(strInputTotal);
             int tipPercentage = getTipPrecentage();
 
-            double tip = total * (tipPercentage/100d);
+            TipRecord record = new TipRecord();
+            record.setBill(total);
+            record.setTipPercentage(tipPercentage);
+            record.setTimestamp(new Date());
 
-            String strTip = String.format(getString(R.string.global_message_tip), tip);
+            String strTip = String.format(getString(R.string.global_message_tip), record.getTip());
+
+            fragmentListener.addToList(record);
             txtTip.setVisibility(View.VISIBLE);
             txtTip.setText(strTip);
         }
