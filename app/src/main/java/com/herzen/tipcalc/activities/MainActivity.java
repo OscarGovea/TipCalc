@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private TipHistoryListFragmentListener fragmentListener;
 
     private final static int TIP_STEP_CHANGE = 1;
-    private final static int DEFAULT_TIP_CHANGE = 10;
-
+    private final static int DEFAULT_TIP_PERCENTAGE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         TipHistoryListFragment fragment = (TipHistoryListFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentList);
+
         fragment.setRetainInstance(true);
         fragmentListener = (TipHistoryListFragmentListener) fragment;
     }
@@ -71,9 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.action_about){
+
+        if (item.getItemId() == R.id.action_about) {
             about();
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(!strInputTotal.isEmpty()) {
             double total = Double.parseDouble(strInputTotal);
-            int tipPercentage = getTipPrecentage();
+            int tipPercentage = getTipPercentage();
 
             TipRecord record = new TipRecord();
             record.setBill(total);
@@ -93,58 +95,50 @@ public class MainActivity extends AppCompatActivity {
             record.setTimestamp(new Date());
 
             String strTip = String.format(getString(R.string.global_message_tip), record.getTip());
-
             fragmentListener.addToList(record);
+
             txtTip.setVisibility(View.VISIBLE);
             txtTip.setText(strTip);
         }
     }
-
     @OnClick(R.id.btnIncrease)
     public void handleClickIncrease() {
-        // Cuando des click a + debe llamar a handleTipChange y sumar 1
         hideKeyboard();
         handleTipChange(TIP_STEP_CHANGE);
     }
 
     @OnClick(R.id.btnDecrease)
     public void handleClickDecrease() {
-        // Cuando des click a - debe llamar a handleTipChange y restar 1
         hideKeyboard();
         handleTipChange(-TIP_STEP_CHANGE);
     }
 
+    @OnClick(R.id.btnClear)
+    public void handleClickClear() {
+        fragmentListener.clearList();
+    }
 
-    public int getTipPrecentage() {
-        // 1 Crear una variable tipPercentage en la que guardemos DEFAULT_TIP_CHANGE
-        int tipPercentage = DEFAULT_TIP_CHANGE;
-        // 2 Crear una variable String strInputTipPercentage que tome el valor del inputPercentage (No olviden el trim)
+    public int getTipPercentage() {
+        int tipPercentage = DEFAULT_TIP_PERCENTAGE;
         String strInputTipPercentage = inputPercentage.getText().toString().trim();
-        // 3 Verificar que la cadena no venga vacia
-        if(strInputTipPercentage.isEmpty()){
-            // 3a Si no Viene vacia sobreEscribir tipPercentage con el valor de strInputTipPercentage (No olviden convertirlo a entero)
+
+        if(!strInputTipPercentage.isEmpty()) {
             tipPercentage = Integer.parseInt(strInputTipPercentage);
         }
-        else{
-            // 3b inputPercentage.setText(String.valueOf(DEFAULT_TIP_PERCENTAGE));
-            inputPercentage.setText(String.valueOf(DEFAULT_TIP_CHANGE));
+        else {
+            inputPercentage.setText(String.valueOf(DEFAULT_TIP_PERCENTAGE));
         }
-        // 4 Devolver el valor de tipPercentage
+
         return tipPercentage;
-
-
     }
 
     public void handleTipChange(int change) {
-        // 1 Llamar a Get Tip Percentage (en una variable)
-        int tipPercentage = getTipPrecentage();
-        // 2 aplicar el incremento/decremento que viene en la variable change
+        int tipPercentage = getTipPercentage();
         tipPercentage += change;
-        // 3 si tipPercentage mayor que 0 entonces colocar el valor del incremento en el input de la vista
-        if(tipPercentage > 0){
+
+        if(tipPercentage > 0) {
             inputPercentage.setText(String.valueOf(tipPercentage));
         }
-
     }
 
     private void hideKeyboard() {
@@ -157,9 +151,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void about() {
-        TipCalcApp app= (TipCalcApp)getApplication();
+        TipCalcApp app = (TipCalcApp) getApplication();
         String strUrl = app.getAboutUrl();
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
