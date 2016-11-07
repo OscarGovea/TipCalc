@@ -7,13 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.herzen.tipcalc.R;
-import com.herzen.tipcalc.models.TipRecord;
-
+/*import com.herzen.tipcalc.models.TipRecord;*/
+import com.herzen.tipcalc.entity.TipRecord;
+import com.herzen.tipcalc.utils.TipUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,18 +48,25 @@ public class TipAdapter extends RecyclerView.Adapter <TipAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         TipRecord element = dataset.get(position);
-        String strTip = String.format(context.getString(R.string.global_message_tip), element.getTip());
+        String strTip = String.format(context.getString(R.string.global_message_tip), TipUtils.getTip(element) );
         holder.txtContent.setText(strTip);
         holder.setOnItemClickListener(element,onItemClickListener);
     }
 
     @Override
     public int getItemCount() {
+
         return dataset.size();
     }
 
+    public void init() {
+        dataset = new Select().from(TipRecord.class).queryList();
+    }
+
     public void add(TipRecord record) {
-        dataset.add(0, record);
+        //dataset.add(0, record);
+        record.save();
+        dataset = new Select().from(TipRecord.class).queryList();
         notifyDataSetChanged();
     }
 

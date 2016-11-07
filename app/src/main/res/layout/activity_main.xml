@@ -15,7 +15,7 @@
         android:id="@+id/tipContent"
         layout="@layout/content_tip" />
 
-<fragment
+    <fragment
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/tipContent"

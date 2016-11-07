@@ -22,9 +22,14 @@ import butterknife.OnClick;
 
 import com.herzen.tipcalc.R;
 import com.herzen.tipcalc.TipCalcApp;
+import com.herzen.tipcalc.db.TipsDatabase;
 import com.herzen.tipcalc.fragments.TipHistoryListFragment;
 import com.herzen.tipcalc.fragments.TipHistoryListFragmentListener;
-import com.herzen.tipcalc.models.TipRecord;
+//import com.herzen.tipcalc.models.TipRecord;
+import com.herzen.tipcalc.entity.TipRecord;
+import com.herzen.tipcalc.utils.TipUtils;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 import java.util.Date;
 
@@ -57,10 +62,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        initDB();
         TipHistoryListFragment fragment = (TipHistoryListFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentList);
-
         fragment.setRetainInstance(true);
         fragmentListener = (TipHistoryListFragmentListener) fragment;
+
+        fragmentListener.initList();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        DBTearDown();
+    }
+
+    private void initDB(){
+        FlowManager.init(new FlowConfig.Builder(this).build());
+        FlowManager.getDatabase(TipsDatabase.class).getWritableDatabase();
+    }
+
+    private void DBTearDown(){
+        FlowManager.destroy();
     }
 
     @Override
@@ -94,7 +116,8 @@ public class MainActivity extends AppCompatActivity {
             record.setTipPercentage(tipPercentage);
             record.setTimestamp(new Date());
 
-            String strTip = String.format(getString(R.string.global_message_tip), record.getTip());
+
+            String strTip = String.format(getString(R.string.global_message_tip), TipUtils.getTip(record) );
             fragmentListener.addToList(record);
 
             txtTip.setVisibility(View.VISIBLE);

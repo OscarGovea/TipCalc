@@ -5,21 +5,19 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.herzen.tipcalc.R;
 import com.herzen.tipcalc.activities.TipDetailActivity;
 import com.herzen.tipcalc.adapters.OnItemClickListener;
 import com.herzen.tipcalc.adapters.TipAdapter;
-import com.herzen.tipcalc.models.TipRecord;
 
-import java.util.ArrayList;
 
+import com.herzen.tipcalc.entity.TipRecord;
+import com.herzen.tipcalc.utils.TipUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -61,21 +59,27 @@ public class TipHistoryListFragment extends Fragment implements TipHistoryListFr
     }
 
     @Override
+    public void initList() {
+        adapter.init();
+    }
+
+    @Override
     public void addToList(TipRecord record) {
         adapter.add(record);
     }
 
     @Override
     public void clearList() {
+
         adapter.clear();
     }
 
     @Override
     public void onItemClick(TipRecord tipRecord) {
         Intent intent = new Intent(getActivity(), TipDetailActivity.class);
-        intent.putExtra(TipDetailActivity.TIP_KEY, tipRecord.getTip());
+        intent.putExtra(TipDetailActivity.TIP_KEY, TipUtils.getTip(tipRecord) );
         intent.putExtra(TipDetailActivity.BILL_TOTAL_KEY, tipRecord.getBill());
-        intent.putExtra(TipDetailActivity.DATE_KEY, tipRecord.getDateFormated());
+        intent.putExtra(TipDetailActivity.DATE_KEY, TipUtils.getDateFormated(tipRecord) );
 
         startActivity(intent);
     }
