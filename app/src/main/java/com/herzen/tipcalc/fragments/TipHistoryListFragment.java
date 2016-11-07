@@ -1,6 +1,6 @@
 package com.herzen.tipcalc.fragments;
 
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.herzen.tipcalc.R;
+import com.herzen.tipcalc.activities.TipDetailActivity;
 import com.herzen.tipcalc.adapters.OnItemClickListener;
 import com.herzen.tipcalc.adapters.TipAdapter;
 import com.herzen.tipcalc.models.TipRecord;
@@ -71,7 +72,11 @@ public class TipHistoryListFragment extends Fragment implements TipHistoryListFr
 
     @Override
     public void onItemClick(TipRecord tipRecord) {
-        //TODO Implementar la logoca para llamar una actividad enviandole la informacion de la propina
-        Log.v("¡Mensaje!", tipRecord.getDateFormated());
+        Intent intent = new Intent(getActivity(), TipDetailActivity.class);
+        intent.putExtra(TipDetailActivity.TIP_KEY, tipRecord.getTip());
+        intent.putExtra(TipDetailActivity.BILL_TOTAL_KEY, tipRecord.getBill());
+        intent.putExtra(TipDetailActivity.DATE_KEY, tipRecord.getDateFormated());
+
+        startActivity(intent);
     }
 }
