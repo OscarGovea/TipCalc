@@ -77,8 +77,8 @@ public class TipAdapter extends RecyclerView.Adapter <TipAdapter.ViewHolder> {
     }
 
     public void clear() {
-       
-        dataset.clear();
+
+        dataset = new Delete().from(TipRecord.class).queryList();
         notifyDataSetChanged();
     }
 
