@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 
@@ -18,6 +20,8 @@ import com.herzen.tipcalc.entity.TipRecord;
 import com.herzen.tipcalc.utils.TipUtils;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.herzen.tipcalc.entity.TipRecord_Table.timestamp;
 
 /**
  * Created by herzen on 13/10/16.
@@ -65,12 +69,15 @@ public class TipAdapter extends RecyclerView.Adapter <TipAdapter.ViewHolder> {
 
     public void add(TipRecord record) {
         //dataset.add(0, record);
+
         record.save();
         dataset = new Select().from(TipRecord.class).queryList();
+        dataset = new Select().from(TipRecord.class).where().orderBy(timestamp, false) .queryList();
         notifyDataSetChanged();
     }
 
     public void clear() {
+       
         dataset.clear();
         notifyDataSetChanged();
     }

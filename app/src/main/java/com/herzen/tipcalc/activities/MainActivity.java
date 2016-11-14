@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnClear)
     public void handleClickClear() {
+
         fragmentListener.clearList();
     }
 
